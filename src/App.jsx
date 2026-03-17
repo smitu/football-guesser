@@ -187,7 +187,7 @@ export default function App() {
         <div style={{ ...S.card, ...S.center, marginTop: 40 }}>
           <div style={{ fontSize: 56, marginBottom: 8 }}>⚽</div>
           <h1 style={{ ...S.h1, fontSize: 28 }}>FOOTBALL</h1>
-          <h1 style={{ ...S.h1, fontSize: 34, background: "linear-gradient(90deg, #1db954, #f5c842)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>GEOGUESSER</h1>
+          <h1 style={{ ...S.h1, fontSize: 34, background: "linear-gradient(90deg, #1db954, #f5c842)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>GUESSER</h1>
           <p style={{ ...S.sub, marginTop: 16, marginBottom: 32 }}>
             Typuj minuty bramek w legendarnych meczach.
             <br />
