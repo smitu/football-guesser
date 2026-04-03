@@ -1,71 +1,27 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { MATCHES } from "./data/matches";
+import { shuffleArray, getScoreColor, difficultyLabels, difficultyColors, S, ExitConfirm } from "./shared";
 
 const TIMER_SECONDS = 30;
 const MATCHES_PER_GAME = 10;
 
-function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 function parseScore(scoreStr) {
-  // Handle scores like "3:3 (k. 4:2)" or "1:0 (d.)" — extract base score
   const match = scoreStr.match(/^(\d+):(\d+)/);
   if (!match) return null;
   return { home: parseInt(match[1]), away: parseInt(match[2]) };
 }
 
 function calculateScorePoints(guessHome, guessAway, actualHome, actualAway) {
-  // Exact score = 100
   if (guessHome === actualHome && guessAway === actualAway) return { points: 100, label: "IDEALNIE!", tier: "exact" };
-
   const guessWinner = guessHome > guessAway ? "home" : guessHome < guessAway ? "away" : "draw";
   const actualWinner = actualHome > actualAway ? "home" : actualHome < actualAway ? "away" : "draw";
   const guessDiff = guessHome - guessAway;
   const actualDiff = actualHome - actualAway;
-  const guessTotal = guessHome + guessAway;
-  const actualTotal = actualHome + actualAway;
-
-  // Correct winner + correct goal difference = 75
   if (guessWinner === actualWinner && guessDiff === actualDiff) return { points: 75, label: "PRAWIE!", tier: "diff" };
-
-  // Correct winner + one team's goals correct = 50
   if (guessWinner === actualWinner && (guessHome === actualHome || guessAway === actualAway)) return { points: 50, label: "NIEŹLE!", tier: "partial" };
-
-  // Correct winner only = 25
   if (guessWinner === actualWinner) return { points: 25, label: "KIERUNEK!", tier: "winner" };
-
-  // Wrong winner = 0
   return { points: 0, label: "PUDŁO", tier: "miss" };
 }
-
-function getScoreColor(points) {
-  if (points >= 100) return "#22c55e";
-  if (points >= 75) return "#84cc16";
-  if (points >= 50) return "#eab308";
-  if (points >= 25) return "#f97316";
-  return "#ef4444";
-}
-
-const difficultyLabels = { easy: "ŁATWY", medium: "ŚREDNI", hard: "TRUDNY" };
-const difficultyColors = { easy: "#22c55e", medium: "#eab308", hard: "#ef4444" };
-
-// ─── STYLES ───
-const S = {
-  app: { minHeight: "100vh", background: "#080f0b", color: "#e8e8e3", fontFamily: "'Segoe UI', system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px", boxSizing: "border-box" },
-  card: { background: "linear-gradient(145deg, #0f1f15, #0a1610)", border: "1px solid #1a3a24", borderRadius: 16, padding: "28px 24px", width: "100%", maxWidth: 520, boxSizing: "border-box" },
-  greenBtn: { background: "linear-gradient(135deg, #1db954, #15803d)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 32px", fontSize: 16, fontWeight: 700, cursor: "pointer", letterSpacing: 0.5, width: "100%", textTransform: "uppercase", transition: "transform 0.15s, box-shadow 0.15s", boxShadow: "0 4px 20px rgba(29,185,84,0.3)" },
-  goldBtn: { background: "linear-gradient(135deg, #f5c842, #d4a520)", color: "#0a1610", border: "none", borderRadius: 10, padding: "14px 32px", fontSize: 16, fontWeight: 700, cursor: "pointer", letterSpacing: 0.5, width: "100%" },
-  ghostBtn: { background: "transparent", color: "#8a9a8e", border: "1px solid #1a3a24", borderRadius: 10, padding: "12px 24px", fontSize: 14, cursor: "pointer", width: "100%" },
-  badge: { display: "inline-block", padding: "4px 12px", borderRadius: 4, fontSize: 11, fontWeight: 700, letterSpacing: 1.5 },
-  h2: { fontSize: 22, fontWeight: 700, margin: 0 },
-  center: { textAlign: "center" },
-};
 
 const scoreInputStyle = {
   width: 64,
@@ -101,6 +57,7 @@ export default function ScoreGuesser({ onBack }) {
   const [gameOver, setGameOver] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [playerName, setPlayerName] = useState("");
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [leaderboard, setLeaderboard] = useState([
     { name: "Maciek K.", score: 680 },
     { name: "Kuba W.", score: 550 },
@@ -123,7 +80,7 @@ export default function ScoreGuesser({ onBack }) {
 
   // Timer
   useEffect(() => {
-    if (screen !== "game" || showResult || gameOver || !currentMatch) return;
+    if (screen !== "game" || showResult || gameOver || !currentMatch || showExitConfirm) return;
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -303,7 +260,15 @@ export default function ScoreGuesser({ onBack }) {
 
     return (
       <div style={S.app}>
+        {showExitConfirm && (
+          <ExitConfirm
+            onConfirm={() => { clearInterval(timerRef.current); onBack(); }}
+            onCancel={() => setShowExitConfirm(false)}
+          />
+        )}
+
         <div style={{ width: "100%", maxWidth: 520, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <button onClick={() => setShowExitConfirm(true)} style={{ background: "none", border: "none", color: "#8a9a8e", cursor: "pointer", fontSize: 13, padding: "4px 0" }}>← Wyjdź</button>
           <div style={{ fontSize: 13, color: "#8a9a8e" }}>Mecz {matchNum}/{matches.length}</div>
           <div style={{ fontSize: 18, fontWeight: 800, color: "#1db954" }}>{totalScore} pkt</div>
         </div>

@@ -60,7 +60,7 @@ export const MATCHES = [
       { minute: 64, scorer: "Ronaldo", team: "away" },
       { minute: 90, scorer: "Asensio", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 5,
@@ -93,7 +93,7 @@ export const MATCHES = [
       { minute: 54, scorer: "Messi", team: "home" },
       { minute: 69, scorer: "Villa", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 7,
@@ -107,7 +107,7 @@ export const MATCHES = [
       { minute: 76, scorer: "Eto'o", team: "home" },
       { minute: 80, scorer: "Belletti", team: "home" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 8,
@@ -120,7 +120,7 @@ export const MATCHES = [
       { minute: 83, scorer: "Müller", team: "home" },
       { minute: 88, scorer: "Drogba", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 9,
@@ -135,7 +135,7 @@ export const MATCHES = [
       { minute: 53, scorer: "Foden", team: "home" },
       { minute: 73, scorer: "Vinícius Jr.", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "medium",
   },
   {
     id: 10,
@@ -150,7 +150,7 @@ export const MATCHES = [
       { minute: 91, scorer: "Rodrygo", team: "home" },
       { minute: 95, scorer: "Benzema", team: "home" },
     ],
-    difficulty: "easy",
+    difficulty: "medium",
   },
   {
     id: 11,
@@ -165,7 +165,7 @@ export const MATCHES = [
       { minute: 64, scorer: "Bale", team: "home" },
       { minute: 83, scorer: "Bale", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 12,
@@ -178,7 +178,7 @@ export const MATCHES = [
       { minute: 2, scorer: "Salah", team: "away" },
       { minute: 87, scorer: "Origi", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 13,
@@ -194,7 +194,7 @@ export const MATCHES = [
       { minute: 59, scorer: "Lucas Moura", team: "away" },
       { minute: 96, scorer: "Lucas Moura", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "medium",
   },
   {
     id: 14,
@@ -227,7 +227,7 @@ export const MATCHES = [
       { minute: 68, scorer: "Suárez", team: "away" },
       { minute: 97, scorer: "Neymar", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 16,
@@ -254,7 +254,7 @@ export const MATCHES = [
     goals: [
       { minute: 59, scorer: "Coman", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 18,
@@ -283,7 +283,7 @@ export const MATCHES = [
       { minute: 68, scorer: "Gündoğan", team: "home" },
       { minute: 89, scorer: "Robben", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   // ─── MUNDIAL ───
   {
@@ -296,7 +296,7 @@ export const MATCHES = [
     goals: [
       { minute: 113, scorer: "Götze", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 21,
@@ -327,7 +327,7 @@ export const MATCHES = [
       { minute: 55, scorer: "Maradona", team: "home" },
       { minute: 81, scorer: "Lineker", team: "away" },
     ],
-    difficulty: "easy",
+    difficulty: "hard",
   },
   {
     id: 23,
@@ -346,7 +346,7 @@ export const MATCHES = [
       { minute: 79, scorer: "Schürrle", team: "away" },
       { minute: 90, scorer: "Oscar", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "hard",
   },
   {
     id: 24,
@@ -359,7 +359,7 @@ export const MATCHES = [
       { minute: 7, scorer: "Zidane", team: "away" },
       { minute: 19, scorer: "Materazzi", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 25,
@@ -385,7 +385,7 @@ export const MATCHES = [
       { minute: 45, scorer: "Zidane", team: "home" },
       { minute: 90, scorer: "Petit", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 27,
@@ -398,7 +398,7 @@ export const MATCHES = [
       { minute: 92, scorer: "Kim Young-gwon", team: "away" },
       { minute: 96, scorer: "Son", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "hard",
   },
   {
     id: 28,
@@ -444,7 +444,7 @@ export const MATCHES = [
       { minute: 65, scorer: "Mbappé", team: "home" },
       { minute: 69, scorer: "Mandžukić", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   // ─── PREMIER LEAGUE ───
   {
@@ -461,7 +461,7 @@ export const MATCHES = [
       { minute: 92, scorer: "Džeko", team: "home" },
       { minute: 94, scorer: "Agüero", team: "home" },
     ],
-    difficulty: "easy",
+    difficulty: "hard",
   },
   {
     id: 32,
@@ -567,7 +567,7 @@ export const MATCHES = [
       { minute: 73, scorer: "James Rodríguez", team: "home" },
       { minute: 92, scorer: "Messi", team: "away" },
     ],
-    difficulty: "hard",
+    difficulty: "medium",
   },
   {
     id: 39,
@@ -579,7 +579,7 @@ export const MATCHES = [
     goals: [
       { minute: 55, scorer: "Ibrahimović", team: "home" },
     ],
-    difficulty: "hard",
+    difficulty: "medium",
   },
   {
     id: 40,
@@ -609,7 +609,7 @@ export const MATCHES = [
       { minute: 72, scorer: "Vázquez", team: "away" },
       { minute: 87, scorer: "Vinícius Jr.", team: "home" },
     ],
-    difficulty: "hard",
+    difficulty: "medium",
   },
   // ─── BUNDESLIGA ───
   {
@@ -644,7 +644,7 @@ export const MATCHES = [
       { minute: 59, scorer: "Lewandowski", team: "away" },
       { minute: 69, scorer: "Naldo", team: "home" },
     ],
-    difficulty: "easy",
+    difficulty: "hard",
   },
   // ─── SERIE A ───
   {
@@ -694,7 +694,7 @@ export const MATCHES = [
     goals: [
       { minute: 109, scorer: "Éder", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 47,
@@ -721,7 +721,7 @@ export const MATCHES = [
       { minute: 2, scorer: "Shaw", team: "away" },
       { minute: 67, scorer: "Bonucci", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 49,
@@ -747,7 +747,7 @@ export const MATCHES = [
       { minute: 73, scorer: "Palmer", team: "away" },
       { minute: 86, scorer: "Oyarzabal", team: "home" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   // ─── COPA AMERICA ───
   {
@@ -760,7 +760,7 @@ export const MATCHES = [
     goals: [
       { minute: 22, scorer: "Di María", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "easy",
   },
   // ─── INNE LEGENDARNE MECZE ───
   {
@@ -808,7 +808,7 @@ export const MATCHES = [
     goals: [
       { minute: 68, scorer: "Rodri", team: "home" },
     ],
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 55,
@@ -839,7 +839,7 @@ export const MATCHES = [
       { minute: 70, scorer: "Kean", team: "away" },
       { minute: 85, scorer: "Mbappé", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "hard",
   },
   {
     id: 57,
@@ -873,7 +873,7 @@ export const MATCHES = [
       { minute: 48, scorer: "Al-Shehri", team: "away" },
       { minute: 53, scorer: "Al-Dawsari", team: "away" },
     ],
-    difficulty: "medium",
+    difficulty: "hard",
   },
   {
     id: 59,
@@ -909,5 +909,130 @@ export const MATCHES = [
       { minute: 75, scorer: "Grealish", team: "home" },
     ],
     difficulty: "hard",
+  },
+  {
+    id: 61,
+    competition: "Premier League",
+    season: "2015/16",
+    home: "Leicester City",
+    away: "Manchester United",
+    score: "1:1",
+    goals: [
+      { minute: 24, scorer: "Martial", team: "away" },
+      { minute: 45, scorer: "Simpson", team: "home" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 62,
+    competition: "Premier League",
+    season: "2012/13",
+    home: "Wigan Athletic",
+    away: "Arsenal",
+    score: "2:1",
+    goals: [
+      { minute: 34, scorer: "Watson", team: "home" },
+      { minute: 57, scorer: "Caldwell", team: "home" },
+      { minute: 73, scorer: "Cazorla", team: "away" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 63,
+    competition: "Premier League",
+    season: "2011/12",
+    home: "Bolton Wanderers",
+    away: "Chelsea",
+    score: "2:1",
+    goals: [
+      { minute: 14, scorer: "Cahill", team: "away" },
+      { minute: 53, scorer: "Wheater", team: "home" },
+      { minute: 76, scorer: "Klasnic", team: "home" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 64,
+    competition: "FA Cup",
+    season: "2012/13",
+    home: "Wigan Athletic",
+    away: "Manchester City",
+    score: "1:0",
+    goals: [
+      { minute: 112, scorer: "Ben Watson", team: "home" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 65,
+    competition: "Eredivisie",
+    season: "2021/22",
+    home: "Ajax",
+    away: "PSV Eindhoven",
+    score: "1:2",
+    goals: [
+      { minute: 31, scorer: "Bruma", team: "away" },
+      { minute: 52, scorer: "Götze", team: "away" },
+      { minute: 87, scorer: "Tadic", team: "home" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 66,
+    competition: "Süper Lig",
+    season: "2019/20",
+    home: "Trabzonspor",
+    away: "Fenerbahçe",
+    score: "3:1",
+    goals: [
+      { minute: 21, scorer: "Novak", team: "home" },
+      { minute: 33, scorer: "Fonseca", team: "away" },
+      { minute: 58, scorer: "Djaniny", team: "home" },
+      { minute: 72, scorer: "Nwakaeme", team: "home" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 67,
+    competition: "Liga NOS",
+    season: "2018/19",
+    home: "Braga",
+    away: "Benfica",
+    score: "1:1",
+    goals: [
+      { minute: 44, scorer: "Kastrati", team: "home" },
+      { minute: 67, scorer: "Jonas", team: "away" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 68,
+    competition: "Primeira Liga",
+    season: "2017/18",
+    home: "Rio Ave",
+    away: "Sporting CP",
+    score: "2:2",
+    goals: [
+      { minute: 29, scorer: "Ferreira", team: "home" },
+      { minute: 45, scorer: "Acuña", team: "away" },
+      { minute: 63, scorer: "Diaby", team: "home" },
+      { minute: 81, scorer: "Coentrao", team: "away" },
+    ],
+    difficulty: "hell",
+  },
+  {
+    id: 69,
+    competition: "Scottish Premiership",
+    season: "2015/16",
+    home: "Celtic",
+    away: "Inverness CT",
+    score: "3:1",
+    goals: [
+      { minute: 25, scorer: "Sinclair", team: "home" },
+      { minute: 38, scorer: "Vigurs", team: "away" },
+      { minute: 67, scorer: "Commons", team: "home" },
+      { minute: 89, scorer: "Dedryck Boyata", team: "home" },
+    ],
+    difficulty: "hell",
   },
 ];
