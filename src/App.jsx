@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { MATCHES } from "./data/matches";
+import ScoreGuesser from "./ScoreGuesser";
 
 const TIMER_SECONDS = 45;
 const MAX_MATCH_MINUTES = 120;
@@ -61,6 +62,7 @@ const S = {
 
 export default function App() {
   const [screen, setScreen] = useState("menu");
+  const [gameMode, setGameMode] = useState(null);
   const [matches, setMatches] = useState([]);
   const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
   const [guessedMinute, setGuessedMinute] = useState(45);
@@ -168,6 +170,11 @@ export default function App() {
   const timerPct = (timeLeft / TIMER_SECONDS) * 100;
   const timerColor = timeLeft <= 10 ? "#ef4444" : timeLeft <= 20 ? "#eab308" : "#22c55e";
 
+  // ─── SCORE GUESSER MODE ───
+  if (gameMode === "score") {
+    return <ScoreGuesser onBack={() => { setGameMode(null); setScreen("menu"); }} />;
+  }
+
   // ─── MENU ───
   if (screen === "menu") {
     return (
@@ -177,17 +184,26 @@ export default function App() {
           <h1 style={{ ...S.h1, fontSize: 28 }}>FOOTBALL</h1>
           <h1 style={{ ...S.h1, fontSize: 34, background: "linear-gradient(90deg, #1db954, #f5c842)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>GUESSER</h1>
           <p style={{ ...S.sub, marginTop: 16, marginBottom: 32 }}>
-            Typuj minuty bramek w legendarnych meczach.
+            Sprawdź swoją wiedzę o legendarnych meczach.
             <br />
-            Im bliżej prawdy, tym więcej punktów.
+            Wybierz tryb i zdobywaj punkty!
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <button style={S.greenBtn} onClick={startGame}>NOWA GRA</button>
+            {/* Mode: Minute Guesser */}
+            <button style={S.greenBtn} onClick={startGame}>
+              <div style={{ fontSize: 18 }}>⏱️ ZGADNIJ MINUTĘ</div>
+              <div style={{ fontSize: 11, fontWeight: 400, opacity: 0.8, marginTop: 4 }}>Typuj minuty bramek na osi czasu</div>
+            </button>
+            {/* Mode: Score Guesser */}
+            <button style={{ ...S.greenBtn, background: "linear-gradient(135deg, #f5c842, #d4a520)", color: "#0a1610", boxShadow: "0 4px 20px rgba(245,200,66,0.3)" }} onClick={() => setGameMode("score")}>
+              <div style={{ fontSize: 18 }}>🏟️ ZGADNIJ WYNIK</div>
+              <div style={{ fontSize: 11, fontWeight: 400, opacity: 0.7, marginTop: 4 }}>Podaj dokładny wynik meczu</div>
+            </button>
             <button style={S.ghostBtn} onClick={() => setScreen("leaderboard")}>RANKING</button>
             <button style={S.ghostBtn} onClick={() => setScreen("howto")}>JAK GRAĆ?</button>
           </div>
         </div>
-        <p style={{ color: "#3a5a44", fontSize: 11, marginTop: 24, letterSpacing: 1 }}>PoC v0.2 · {MATCHES_PER_GAME} meczy · 1 bramka · {MATCHES.length} klasyków · 2026</p>
+        <p style={{ color: "#3a5a44", fontSize: 11, marginTop: 24, letterSpacing: 1 }}>v0.3 · 2 tryby · {MATCHES.length} klasyków · 2026</p>
       </div>
     );
   }
