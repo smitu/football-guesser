@@ -1,16 +1,19 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { MATCHES } from "./data/matches";
-import { shuffleArray, getScoreColor, difficultyLabels, difficultyColors, S, ExitConfirm } from "./shared";
+import {
+  shuffleArray, getScoreColor, difficultyLabels, difficultyColors,
+  S, ExitConfirm,
+  topBar, exitBtn, timerBarContainer, matchInfoStyle, teamNameStyle, scoreBoxStyle,
+  progressDot, resultBox, inputStyle, leaderboardRow, summaryMatchRow, getTimerColor,
+} from "./shared";
 
 const TIMER_SECONDS = 20;
 const MATCHES_PER_GAME = 10;
 const OPTIONS_COUNT = 4;
 
-// Build a pool of all unique scorers from the database
 function getAllScorers() {
   const scorers = new Set();
   MATCHES.forEach((m) => m.goals.forEach((g) => {
-    // Skip own goals
     if (!g.scorer.includes("(s.)")) scorers.add(g.scorer);
   }));
   return [...scorers];
@@ -49,9 +52,7 @@ export default function ScorerGuesser({ onBack }) {
   const timerRef = useRef(null);
   const allScorers = useRef(getAllScorers());
 
-  // Initialize game on mount
   useEffect(() => {
-    // Pick matches and one iconic goal per match, skip own goals
     const shuffled = shuffleArray(MATCHES).slice(0, MATCHES_PER_GAME * 2);
     const selected = [];
     for (const match of shuffled) {
@@ -68,7 +69,6 @@ export default function ScorerGuesser({ onBack }) {
   const currentMatch = matches[currentMatchIdx];
   const currentGoal = currentMatch?.selectedGoal;
 
-  // Timer
   useEffect(() => {
     if (screen !== "game" || showResult || gameOver || !currentMatch || showExitConfirm) return;
     timerRef.current = setInterval(() => {
@@ -88,23 +88,14 @@ export default function ScorerGuesser({ onBack }) {
     (option, timeOut = false) => {
       clearInterval(timerRef.current);
       if (!currentGoal) return;
-
       const correct = !timeOut && option === currentGoal.scorer;
       const points = timeOut ? 0 : correct ? 100 : 0;
       const label = timeOut ? "CZAS!" : correct ? "IDEALNIE!" : "PUDŁO";
-
       const entry = {
-        match: currentMatch,
-        selected: option,
-        correct: currentGoal.scorer,
-        minute: currentGoal.minute,
-        team: currentGoal.team,
-        points,
-        label,
-        isCorrect: correct,
-        timeOut,
+        match: currentMatch, selected: option, correct: currentGoal.scorer,
+        minute: currentGoal.minute, team: currentGoal.team,
+        points, label, isCorrect: correct, timeOut,
       };
-
       setLastResult(entry);
       setTotalScore((prev) => prev + points);
       setMatchResults((prev) => [...prev, entry]);
@@ -117,7 +108,6 @@ export default function ScorerGuesser({ onBack }) {
     setShowResult(false);
     setLastResult(null);
     setSelectedOption(null);
-
     if (currentMatchIdx + 1 < matches.length) {
       setCurrentMatchIdx((prev) => prev + 1);
       setTimeLeft(TIMER_SECONDS);
@@ -160,21 +150,37 @@ export default function ScorerGuesser({ onBack }) {
   };
 
   const timerPct = (timeLeft / TIMER_SECONDS) * 100;
-  const timerColor = timeLeft <= 5 ? "#ef4444" : timeLeft <= 10 ? "#eab308" : "#22c55e";
+  const timerColor = getTimerColor(timeLeft, TIMER_SECONDS);
+
+  const optionBtn = (isHover) => ({
+    background: isHover ? "rgba(255, 82, 82, 0.06)" : "rgba(255, 255, 255, 0.02)",
+    border: isHover ? "2px solid rgba(255, 82, 82, 0.3)" : "2px solid rgba(255, 255, 255, 0.06)",
+    borderRadius: 14,
+    padding: "18px 14px",
+    color: "#e8eaed",
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    textAlign: "center",
+    fontFamily: "'DM Sans', sans-serif",
+  });
 
   // ─── LEADERBOARD ───
   if (screen === "leaderboard") {
     return (
       <div style={S.app}>
-        <div style={{ ...S.card, marginTop: 40 }}>
-          <h2 style={{ ...S.h2, ...S.center, marginBottom: 24 }}>🏆 RANKING — STRZELCY</h2>
+        <div style={{ ...S.card, marginTop: 32 }}>
+          <h2 style={{ ...S.h2, ...S.center, marginBottom: 24 }}>
+            <span style={{ fontSize: 24, marginRight: 8 }}>🏆</span>RANKING — STRZELCY
+          </h2>
           {leaderboard.map((entry, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: i === 0 ? "rgba(245,200,66,0.1)" : i < 3 ? "rgba(29,185,84,0.06)" : "transparent", borderRadius: 8, marginBottom: 4, border: i === 0 ? "1px solid rgba(245,200,66,0.2)" : "1px solid transparent" }}>
+            <div key={i} style={leaderboardRow(i)}>
               <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                <span style={{ fontWeight: 800, fontSize: 16, color: i === 0 ? "#f5c842" : i < 3 ? "#1db954" : "#8a9a8e", width: 24, textAlign: "center" }}>{i + 1}</span>
+                <span style={{ fontWeight: 900, fontSize: 15, color: i === 0 ? "#ffab00" : i < 3 ? "#00e676" : "#4a5568", width: 28, textAlign: "center", fontFamily: "'Outfit', sans-serif" }}>{i + 1}</span>
                 <span style={{ fontWeight: 600, fontSize: 15 }}>{entry.name}</span>
               </div>
-              <span style={{ fontWeight: 800, fontSize: 16, color: i === 0 ? "#f5c842" : "#1db954" }}>{entry.score}</span>
+              <span style={{ fontWeight: 800, fontSize: 16, color: i === 0 ? "#ffab00" : "#00e676", fontFamily: "'Outfit', sans-serif" }}>{entry.score}</span>
             </div>
           ))}
           <button style={{ ...S.ghostBtn, marginTop: 20 }} onClick={onBack}>WRÓĆ DO MENU</button>
@@ -188,34 +194,43 @@ export default function ScorerGuesser({ onBack }) {
     const correctCount = matchResults.filter((mr) => mr.isCorrect).length;
     return (
       <div style={S.app}>
-        <div style={{ ...S.card, ...S.center, marginTop: 40 }}>
-          <div style={{ fontSize: 48, marginBottom: 8 }}>🎉</div>
-          <h2 style={S.h2}>KONIEC GRY!</h2>
-          <div style={{ fontSize: 12, color: "#8a9a8e", marginTop: 4 }}>TRYB: ZGADNIJ STRZELCA</div>
-          <div style={{ margin: "24px 0", padding: "20px", background: "rgba(29,185,84,0.08)", borderRadius: 12, border: "1px solid rgba(29,185,84,0.2)" }}>
-            <div style={{ fontSize: 48, fontWeight: 800, color: "#1db954" }}>{totalScore}</div>
-            <div style={{ color: "#8a9a8e", fontSize: 13, marginTop: 4 }}>PUNKTÓW</div>
+        <div style={{ ...S.card, ...S.center, marginTop: 32 }}>
+          <div style={{ fontSize: 52, marginBottom: 12 }}>🎉</div>
+          <h2 style={{ ...S.h2, fontSize: 26 }}>KONIEC GRY!</h2>
+          <div style={{ fontSize: 12, color: "#5a6577", marginTop: 4, fontFamily: "'Outfit', sans-serif", letterSpacing: 2 }}>TRYB: ZGADNIJ STRZELCA</div>
+
+          <div style={{ margin: "28px 0", padding: "24px", background: "rgba(0, 230, 118, 0.05)", borderRadius: 16, border: "1px solid rgba(0, 230, 118, 0.1)" }}>
+            <div style={{ fontSize: 52, fontWeight: 900, color: "#00e676", fontFamily: "'Outfit', sans-serif" }}>{totalScore}</div>
+            <div style={{ color: "#5a6577", fontSize: 12, marginTop: 4, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>PUNKTÓW</div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", gap: 32, marginBottom: 24 }}>
-            <div><div style={{ fontSize: 22, fontWeight: 700 }}>{matches.length}</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>BRAMEK</div></div>
-            <div><div style={{ fontSize: 22, fontWeight: 700, color: "#f5c842" }}>{correctCount}</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>TRAFIONE</div></div>
-            <div><div style={{ fontSize: 22, fontWeight: 700, color: "#84cc16" }}>{Math.round((correctCount / matches.length) * 100)}%</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>CELNOŚĆ</div></div>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: 40, marginBottom: 28 }}>
+            <div>
+              <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Outfit', sans-serif" }}>{matches.length}</div>
+              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>BRAMEK</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#ffab00", fontFamily: "'Outfit', sans-serif" }}>{correctCount}</div>
+              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>TRAFIONE</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#76ff03", fontFamily: "'Outfit', sans-serif" }}>{Math.round((correctCount / matches.length) * 100)}%</div>
+              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>CELNOŚĆ</div>
+            </div>
           </div>
 
           {matchResults.map((mr, i) => (
-            <div key={i} style={{ textAlign: "left", padding: "12px 14px", background: "rgba(255,255,255,0.02)", borderRadius: 8, marginBottom: 6, border: "1px solid #1a3a24" }}>
+            <div key={i} style={summaryMatchRow}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>{mr.match.home} vs {mr.match.away}</div>
-                <div style={{ fontWeight: 800, color: mr.isCorrect ? "#22c55e" : "#ef4444" }}>{mr.isCorrect ? "✓" : "✗"}</div>
+                <div style={{ fontWeight: 800, color: mr.isCorrect ? "#00e676" : "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{mr.isCorrect ? "✓" : "✗"}</div>
               </div>
-              <div style={{ fontSize: 11, color: "#8a9a8e" }}>
-                {mr.correct} {mr.minute}' · {mr.match.competition} {mr.match.season}
-              </div>
+              <div style={{ fontSize: 11, color: "#5a6577", marginTop: 4 }}>{mr.correct} {mr.minute}' · {mr.match.competition} {mr.match.season}</div>
             </div>
           ))}
 
-          <div style={{ marginTop: 24 }}>
-            <input type="text" placeholder="Twoje imię / nick" value={playerName} onChange={(e) => setPlayerName(e.target.value)} style={{ width: "100%", padding: "12px 16px", background: "#0a1610", border: "1px solid #1a3a24", borderRadius: 8, color: "#e8e8e3", fontSize: 15, marginBottom: 12, boxSizing: "border-box", outline: "none" }} />
+          <div style={{ marginTop: 28 }}>
+            <input type="text" placeholder="Twoje imię / nick" value={playerName} onChange={(e) => setPlayerName(e.target.value)} style={inputStyle} />
             <button style={S.goldBtn} onClick={submitToLeaderboard}>ZAPISZ WYNIK</button>
           </div>
           <button style={{ ...S.ghostBtn, marginTop: 12 }} onClick={restartGame}>ZAGRAJ PONOWNIE</button>
@@ -238,40 +253,45 @@ export default function ScorerGuesser({ onBack }) {
           />
         )}
 
-        <div style={{ width: "100%", maxWidth: 520, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <button onClick={() => setShowExitConfirm(true)} style={{ background: "none", border: "none", color: "#8a9a8e", cursor: "pointer", fontSize: 13, padding: "4px 0" }}>← Wyjdź</button>
-          <div style={{ fontSize: 13, color: "#8a9a8e" }}>Bramka {matchNum}/{matches.length}</div>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#1db954" }}>{totalScore} pkt</div>
+        <div style={topBar}>
+          <button onClick={() => setShowExitConfirm(true)} style={exitBtn}>← Wyjdź</button>
+          <div style={{ fontSize: 13, color: "#5a6577", fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Bramka {matchNum}/{matches.length}</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: "#00e676", fontFamily: "'Outfit', sans-serif" }}>{totalScore} pkt</div>
         </div>
 
         <div style={{ ...S.card, position: "relative" }}>
-          {/* Timer bar */}
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, borderRadius: "16px 16px 0 0", overflow: "hidden", background: "rgba(255,255,255,0.05)" }}>
-            <div style={{ height: "100%", width: `${timerPct}%`, background: timerColor, transition: "width 1s linear, background 0.5s" }} />
+          <div style={timerBarContainer}>
+            <div style={{ height: "100%", width: `${timerPct}%`, background: `linear-gradient(90deg, ${timerColor}, ${timerColor}aa)`, transition: "width 1s linear, background 0.5s", boxShadow: `0 0 12px ${timerColor}44` }} />
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, marginTop: 4 }}>
-            <span style={{ ...S.badge, background: difficultyColors[currentMatch.difficulty] + "22", color: difficultyColors[currentMatch.difficulty], border: `1px solid ${difficultyColors[currentMatch.difficulty]}44` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, marginTop: 4 }}>
+            <span style={{ ...S.badge, background: difficultyColors[currentMatch.difficulty] + "12", color: difficultyColors[currentMatch.difficulty], border: `1px solid ${difficultyColors[currentMatch.difficulty]}22` }}>
               {difficultyLabels[currentMatch.difficulty]}
             </span>
-            <span style={{ fontSize: 24, fontWeight: 800, color: timerColor, fontVariantNumeric: "tabular-nums" }}>{timeLeft}s</span>
+            <span style={{ fontSize: 26, fontWeight: 900, color: timerColor, fontVariantNumeric: "tabular-nums", fontFamily: "'Outfit', sans-serif", animation: timeLeft <= 5 ? "timerUrgent 0.5s ease-in-out infinite" : "none" }}>{timeLeft}s</span>
           </div>
 
           {/* Match info */}
-          <div style={{ ...S.center, marginBottom: 20 }}>
-            <div style={{ fontSize: 11, color: "#8a9a8e", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 8 }}>{currentMatch.competition} · {currentMatch.season}</div>
+          <div style={{ ...S.center, marginBottom: 24 }}>
+            <div style={matchInfoStyle}>{currentMatch.competition} · {currentMatch.season}</div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
-              <span style={{ fontSize: 18, fontWeight: 700, textAlign: "right", flex: 1 }}>{currentMatch.home}</span>
-              <span style={{ fontSize: 22, fontWeight: 800, color: "#f5c842", padding: "4px 14px", background: "rgba(245,200,66,0.1)", borderRadius: 8 }}>{currentMatch.score}</span>
-              <span style={{ fontSize: 18, fontWeight: 700, textAlign: "left", flex: 1 }}>{currentMatch.away}</span>
+              <span style={{ ...teamNameStyle, textAlign: "right", flex: 1 }}>{currentMatch.home}</span>
+              <span style={scoreBoxStyle}>{currentMatch.score}</span>
+              <span style={{ ...teamNameStyle, textAlign: "left", flex: 1 }}>{currentMatch.away}</span>
             </div>
           </div>
 
           {/* Goal prompt */}
-          <div style={{ ...S.center, padding: "16px", background: "rgba(29,185,84,0.06)", borderRadius: 10, border: "1px solid rgba(29,185,84,0.15)", marginBottom: 20 }}>
-            <div style={{ fontSize: 16, fontWeight: 700 }}>
-              Kto strzelił bramkę w <span style={{ color: "#1db954" }}>{currentGoal.minute}'</span>
-              <span style={{ color: "#8a9a8e", fontWeight: 400 }}> ({currentGoal.team === "home" ? currentMatch.home : currentMatch.away})</span>?
+          <div style={{
+            ...S.center, padding: "18px 16px",
+            background: "rgba(255, 82, 82, 0.04)",
+            borderRadius: 14,
+            border: "1px solid rgba(255, 82, 82, 0.1)",
+            marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5 }}>
+              Kto strzelił bramkę w <span style={{ color: "#ff5252", fontWeight: 700 }}>{currentGoal.minute}'</span>
+              <span style={{ color: "#5a6577", fontWeight: 400 }}> ({currentGoal.team === "home" ? currentMatch.home : currentMatch.away})</span>?
             </div>
           </div>
 
@@ -282,20 +302,17 @@ export default function ScorerGuesser({ onBack }) {
                 <button
                   key={i}
                   onClick={() => handleSubmit(option)}
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "2px solid #1a3a24",
-                    borderRadius: 10,
-                    padding: "16px 12px",
-                    color: "#e8e8e3",
-                    fontSize: 15,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "all 0.15s",
-                    textAlign: "center",
+                  style={optionBtn(false)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255, 82, 82, 0.3)";
+                    e.currentTarget.style.background = "rgba(255, 82, 82, 0.06)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
                   }}
-                  onMouseEnter={(e) => { e.target.style.borderColor = "#1db954"; e.target.style.background = "rgba(29,185,84,0.08)"; }}
-                  onMouseLeave={(e) => { e.target.style.borderColor = "#1a3a24"; e.target.style.background = "rgba(255,255,255,0.03)"; }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.06)";
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.02)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
                   {option}
                 </button>
@@ -305,36 +322,35 @@ export default function ScorerGuesser({ onBack }) {
 
           {/* Result */}
           {showResult && lastResult && (
-            <div style={{ ...S.center, padding: "20px", background: `${lastResult.isCorrect ? "#22c55e" : "#ef4444"}11`, borderRadius: 12, border: `1px solid ${lastResult.isCorrect ? "#22c55e" : "#ef4444"}33`, marginBottom: 20 }}>
-              <div style={{ fontSize: 28, fontWeight: 800, color: lastResult.isCorrect ? "#22c55e" : "#ef4444" }}>{lastResult.label}</div>
-
+            <div style={resultBox(lastResult.isCorrect ? "#00e676" : "#ff5252")}>
+              <div style={{ fontSize: 30, fontWeight: 900, color: lastResult.isCorrect ? "#00e676" : "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{lastResult.label}</div>
               {lastResult.timeOut ? (
-                <div style={{ fontSize: 14, color: "#8a9a8e", marginTop: 8 }}>Czas minął!</div>
+                <div style={{ fontSize: 14, color: "#5a6577", marginTop: 10 }}>Czas minął!</div>
               ) : !lastResult.isCorrect ? (
-                <div style={{ fontSize: 14, color: "#8a9a8e", marginTop: 8 }}>
-                  Twój typ: <b style={{ color: "#ef4444" }}>{lastResult.selected}</b>
+                <div style={{ fontSize: 14, color: "#5a6577", marginTop: 10 }}>
+                  Twój typ: <b style={{ color: "#ff5252" }}>{lastResult.selected}</b>
                 </div>
               ) : null}
-
-              <div style={{ fontSize: 18, fontWeight: 700, color: "#e8e8e3", marginTop: 12 }}>
-                Strzelec: <span style={{ color: "#22c55e" }}>{lastResult.correct}</span> · {lastResult.minute}'
+              <div style={{ fontSize: 20, fontWeight: 700, color: "#e8eaed", marginTop: 14 }}>
+                Strzelec: <span style={{ color: "#00e676" }}>{lastResult.correct}</span> · {lastResult.minute}'
               </div>
-
-              <div style={{ fontSize: 32, fontWeight: 800, color: lastResult.isCorrect ? "#22c55e" : "#ef4444", marginTop: 8 }}>+{lastResult.points}</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: lastResult.isCorrect ? "#00e676" : "#ff5252", marginTop: 10, fontFamily: "'Outfit', sans-serif" }}>+{lastResult.points}</div>
             </div>
           )}
 
-          {/* Action button — only after result */}
           {showResult && (
             <button style={S.greenBtn} onClick={nextMatch}>
               {currentMatchIdx + 1 < matches.length ? "NASTĘPNA BRAMKA →" : "ZOBACZ WYNIKI"}
             </button>
           )}
 
-          {/* Match progress */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16 }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 18 }}>
             {matches.map((_, i) => (
-              <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: i < currentMatchIdx ? "#1db954" : i === currentMatchIdx ? (showResult ? (lastResult?.isCorrect ? "#22c55e" : "#ef4444") : "#f5c842") : "#1a3a24", transition: "background 0.3s" }} />
+              <div key={i} style={progressDot(
+                i < currentMatchIdx,
+                i === currentMatchIdx,
+                showResult ? (lastResult?.isCorrect ? "#00e676" : "#ff5252") : "#ffab00"
+              )} />
             ))}
           </div>
         </div>
