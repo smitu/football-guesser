@@ -3,7 +3,7 @@ import { MATCHES } from "./data/matches";
 
 const TIMER_SECONDS = 45;
 const MAX_MATCH_MINUTES = 120;
-const MATCHES_PER_GAME = 5;
+const MATCHES_PER_GAME = 10;
 
 function calculateScore(guessedMinute, actualMinute) {
   const diff = Math.abs(guessedMinute - actualMinute);
@@ -63,11 +63,9 @@ export default function App() {
   const [screen, setScreen] = useState("menu");
   const [matches, setMatches] = useState([]);
   const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
-  const [currentGoalIdx, setCurrentGoalIdx] = useState(0);
   const [guessedMinute, setGuessedMinute] = useState(45);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [totalScore, setTotalScore] = useState(0);
-  const [goalResults, setGoalResults] = useState([]);
   const [matchResults, setMatchResults] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [lastScore, setLastScore] = useState(null);
@@ -85,19 +83,20 @@ export default function App() {
   const timerRef = useRef(null);
 
   const currentMatch = matches[currentMatchIdx];
-  const currentGoal = currentMatch?.goals[currentGoalIdx];
-  const hasExtraTime = currentMatch?.goals.some((g) => g.minute > 90);
+  const currentGoal = currentMatch?.selectedGoal;
+  const hasExtraTime = currentGoal?.minute > 90;
   const maxMin = hasExtraTime ? MAX_MATCH_MINUTES : 90;
 
   const startGame = () => {
-    const shuffled = shuffleArray(MATCHES).slice(0, MATCHES_PER_GAME);
+    const shuffled = shuffleArray(MATCHES).slice(0, MATCHES_PER_GAME).map((match) => {
+      const randomGoal = match.goals[Math.floor(Math.random() * match.goals.length)];
+      return { ...match, selectedGoal: randomGoal };
+    });
     setMatches(shuffled);
     setCurrentMatchIdx(0);
-    setCurrentGoalIdx(0);
     setGuessedMinute(45);
     setTimeLeft(TIMER_SECONDS);
     setTotalScore(0);
-    setGoalResults([]);
     setMatchResults([]);
     setShowResult(false);
     setGameOver(false);
@@ -117,7 +116,7 @@ export default function App() {
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [screen, showResult, currentGoalIdx, currentMatchIdx, gameOver]);
+  }, [screen, showResult, currentMatchIdx, gameOver]);
 
   const handleSubmitGuess = useCallback(
     (timeOut = false) => {
@@ -128,34 +127,23 @@ export default function App() {
 
       setLastScore({ guess, actual, score, scorer: currentGoal.scorer, team: currentGoal.team, timeOut });
       setTotalScore((prev) => prev + score);
-      setGoalResults((prev) => [...prev, { guess, actual, score, scorer: currentGoal.scorer }]);
+      setMatchResults((prev) => [...prev, { match: currentMatch, score, guess, actual, scorer: currentGoal.scorer, timeOut }]);
       setShowResult(true);
     },
-    [currentGoal, guessedMinute]
+    [currentGoal, currentMatch, guessedMinute]
   );
 
-  const nextGoal = () => {
+  const nextMatch = () => {
     setShowResult(false);
     setLastScore(null);
 
-    if (currentGoalIdx + 1 < currentMatch.goals.length) {
-      setCurrentGoalIdx((prev) => prev + 1);
+    if (currentMatchIdx + 1 < matches.length) {
+      setCurrentMatchIdx((prev) => prev + 1);
       setGuessedMinute(45);
       setTimeLeft(TIMER_SECONDS);
     } else {
-      const matchScore = goalResults.reduce((sum, r) => sum + r.score, 0) + lastScore.score;
-      setMatchResults((prev) => [...prev, { match: currentMatch, score: matchScore, goals: [...goalResults, lastScore] }]);
-      setGoalResults([]);
-
-      if (currentMatchIdx + 1 < matches.length) {
-        setCurrentMatchIdx((prev) => prev + 1);
-        setCurrentGoalIdx(0);
-        setGuessedMinute(45);
-        setTimeLeft(TIMER_SECONDS);
-      } else {
-        setGameOver(true);
-        setScreen("summary");
-      }
+      setGameOver(true);
+      setScreen("summary");
     }
   };
 
@@ -199,7 +187,7 @@ export default function App() {
             <button style={S.ghostBtn} onClick={() => setScreen("howto")}>JAK GRAĆ?</button>
           </div>
         </div>
-        <p style={{ color: "#3a5a44", fontSize: 11, marginTop: 24, letterSpacing: 1 }}>PoC v0.1 · {MATCHES_PER_GAME} losowych meczy · 2026</p>
+        <p style={{ color: "#3a5a44", fontSize: 11, marginTop: 24, letterSpacing: 1 }}>PoC v0.2 · {MATCHES_PER_GAME} meczy · 1 bramka · {MATCHES.length} klasyków · 2026</p>
       </div>
     );
   }
@@ -254,8 +242,7 @@ export default function App() {
 
   // ─── SUMMARY ───
   if (screen === "summary") {
-    const totalGoals = matchResults.reduce((sum, mr) => sum + mr.goals.length, 0);
-    const perfectHits = matchResults.reduce((sum, mr) => sum + mr.goals.filter((g) => g.score === 100).length, 0);
+    const perfectHits = matchResults.filter((mr) => mr.score === 100).length;
     return (
       <div style={S.app}>
         <div style={{ ...S.card, ...S.center, marginTop: 40 }}>
@@ -267,7 +254,6 @@ export default function App() {
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: 32, marginBottom: 24 }}>
             <div><div style={{ fontSize: 22, fontWeight: 700 }}>{matches.length}</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>MECZY</div></div>
-            <div><div style={{ fontSize: 22, fontWeight: 700 }}>{totalGoals}</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>BRAMEK</div></div>
             <div><div style={{ fontSize: 22, fontWeight: 700, color: "#f5c842" }}>{perfectHits}</div><div style={{ color: "#8a9a8e", fontSize: 11 }}>IDEALNE</div></div>
           </div>
 
@@ -275,9 +261,9 @@ export default function App() {
             <div key={i} style={{ textAlign: "left", padding: "12px 14px", background: "rgba(255,255,255,0.02)", borderRadius: 8, marginBottom: 6, border: "1px solid #1a3a24" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>{mr.match.home} vs {mr.match.away}</div>
-                <div style={{ fontWeight: 800, color: "#1db954" }}>{mr.score} pkt</div>
+                <div style={{ fontWeight: 800, color: getScoreColor(mr.score) }}>{mr.score} pkt</div>
               </div>
-              <div style={{ fontSize: 11, color: "#8a9a8e" }}>{mr.match.competition} {mr.match.season}</div>
+              <div style={{ fontSize: 11, color: "#8a9a8e" }}>{mr.match.competition} {mr.match.season} · {mr.scorer} {mr.actual}'</div>
             </div>
           ))}
 
@@ -293,8 +279,6 @@ export default function App() {
 
   // ─── GAME ───
   if (screen === "game" && currentMatch && currentGoal) {
-    const goalNum = currentGoalIdx + 1;
-    const totalGoals = currentMatch.goals.length;
     const matchNum = currentMatchIdx + 1;
     const sliderPct = ((guessedMinute - 1) / (maxMin - 1)) * 100;
 
@@ -330,7 +314,6 @@ export default function App() {
 
           {/* Goal prompt */}
           <div style={{ ...S.center, padding: "16px", background: "rgba(29,185,84,0.06)", borderRadius: 10, border: "1px solid rgba(29,185,84,0.15)", marginBottom: 20 }}>
-            <div style={{ fontSize: 12, color: "#8a9a8e", marginBottom: 4 }}>BRAMKA {goalNum} z {totalGoals}</div>
             <div style={{ fontSize: 16, fontWeight: 700 }}>
               W której minucie strzelił <span style={{ color: "#1db954" }}>{currentGoal.scorer}</span>
               <span style={{ color: "#8a9a8e", fontWeight: 400 }}> ({currentGoal.team === "home" ? currentMatch.home : currentMatch.away})</span>?
@@ -399,15 +382,15 @@ export default function App() {
           {!showResult ? (
             <button style={S.greenBtn} onClick={() => handleSubmitGuess(false)}>ZATWIERDŹ · {guessedMinute}'</button>
           ) : (
-            <button style={S.greenBtn} onClick={nextGoal}>
-              {currentGoalIdx + 1 < currentMatch.goals.length ? "NASTĘPNA BRAMKA →" : currentMatchIdx + 1 < matches.length ? "NASTĘPNY MECZ →" : "ZOBACZ WYNIKI"}
+            <button style={S.greenBtn} onClick={nextMatch}>
+              {currentMatchIdx + 1 < matches.length ? "NASTĘPNY MECZ →" : "ZOBACZ WYNIKI"}
             </button>
           )}
 
-          {/* Progress dots */}
+          {/* Match progress */}
           <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16 }}>
-            {currentMatch.goals.map((_, i) => (
-              <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: i < currentGoalIdx ? "#1db954" : i === currentGoalIdx ? (showResult ? getScoreColor(lastScore?.score || 0) : "#f5c842") : "#1a3a24", transition: "background 0.3s" }} />
+            {matches.map((_, i) => (
+              <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: i < currentMatchIdx ? "#1db954" : i === currentMatchIdx ? (showResult ? getScoreColor(lastScore?.score || 0) : "#f5c842") : "#1a3a24", transition: "background 0.3s" }} />
             ))}
           </div>
         </div>
