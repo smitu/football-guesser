@@ -5,6 +5,9 @@ import ScorerGuesser from "./ScorerGuesser";
 import TransferGuesser from "./TransferGuesser";
 import LearnMode from "./LearnMode";
 import StadiumGuesser from "./StadiumGuesser";
+import AuthScreen from "./AuthScreen";
+import { useAuth } from "./AuthContext";
+import { saveGameResult, getLeaderboard } from "./db";
 import {
   shuffleArray, getScoreColor, difficultyLabels, difficultyColors,
   S, modeButtons, modeAccents, ExitConfirm,
@@ -37,6 +40,8 @@ function getScoreLabel(score) {
 }
 
 export default function App() {
+  const { user, profile, loading, signOut } = useAuth();
+  const [guestMode, setGuestMode] = useState(false);
   const [screen, setScreen] = useState("menu");
   const [gameMode, setGameMode] = useState(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
@@ -149,6 +154,26 @@ export default function App() {
 
   const goToMenu = () => { setGameMode(null); setScreen("menu"); setShowExitConfirm(false); };
 
+  const displayName = profile?.display_name || "Gracz";
+  const isLoggedIn = !!user;
+
+  // ─── LOADING ───
+  if (loading) {
+    return (
+      <div style={{ ...S.app, justifyContent: "center", minHeight: "100vh" }}>
+        <div style={{ textAlign: "center", animation: "fadeIn 0.3s ease-out" }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>⚽</div>
+          <div style={{ color: "#4b5264", fontSize: 13, fontFamily: "'Sora', sans-serif" }}>Ładowanie...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── AUTH SCREEN ───
+  if (!user && !guestMode) {
+    return <AuthScreen onSkip={() => setGuestMode(true)} />;
+  }
+
   // ─── SUB-MODES ───
   if (gameMode === "score") return <ScoreGuesser onBack={goToMenu} />;
   if (gameMode === "scorer") return <ScorerGuesser onBack={goToMenu} />;
@@ -169,7 +194,24 @@ export default function App() {
 
     return (
       <div style={S.app}>
-        <div style={{ ...S.card, ...S.center, marginTop: 24 }}>
+        {/* User bar */}
+        {isLoggedIn && (
+          <div style={{
+            width: "100%", maxWidth: 520, display: "flex", justifyContent: "space-between", alignItems: "center",
+            marginBottom: 8, padding: "0 4px",
+            animation: "slideDown 0.3s ease-out both",
+          }}>
+            <span style={{ fontSize: 12, color: "#8892a4", fontFamily: "'Sora', sans-serif" }}>
+              Cześć, <b style={{ color: "#edf0f7" }}>{displayName}</b>
+            </span>
+            <button onClick={signOut} style={{
+              background: "none", border: "none", color: "#4b5264", fontSize: 11,
+              cursor: "pointer", fontFamily: "'Sora', sans-serif", padding: "4px 0",
+            }}>Wyloguj</button>
+          </div>
+        )}
+
+        <div style={{ ...S.card, ...S.center, marginTop: isLoggedIn ? 0 : 24 }}>
           {/* Logo mark */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
@@ -240,11 +282,19 @@ export default function App() {
           </div>
         </div>
 
+        {!isLoggedIn && guestMode && (
+          <button onClick={() => setGuestMode(false)} style={{
+            background: "none", border: "none", color: "#4ade80", fontSize: 11,
+            cursor: "pointer", fontFamily: "'Sora', sans-serif", marginTop: 14,
+            textDecoration: "underline", textUnderlineOffset: 3,
+          }}>Zaloguj się, żeby zapisywać wyniki</button>
+        )}
+
         <p style={{
-          color: "#2a2f3a", fontSize: 10, marginTop: 20,
+          color: "#2a2f3a", fontSize: 10, marginTop: isLoggedIn ? 20 : 8,
           letterSpacing: 2.5, fontFamily: "'Sora', sans-serif", fontWeight: 500,
         }}>
-          v0.8 · 6 trybów · {MATCHES.length} klasyków
+          v0.9 · 6 trybów · {MATCHES.length} klasyków
         </p>
       </div>
     );
