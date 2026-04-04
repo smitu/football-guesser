@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { TRANSFERS } from "./data/transfers";
+import { getClubData } from "./data/clubs";
 import {
   shuffleArray, difficultyLabels, difficultyColors,
   S, ExitConfirm,
@@ -9,13 +10,19 @@ import {
 
 const TIMER_SECONDS = 30;
 const ROUNDS_PER_GAME = 10;
-const OPTIONS_COUNT = 4;
 
-function generateOptions(correctPlayer, allPlayers) {
+// More options for harder difficulties
+function getOptionsCount(difficulty) {
+  if (difficulty === "hell") return 6;
+  if (difficulty === "hard") return 6;
+  return 4;
+}
+
+function generateOptions(correctPlayer, allPlayers, count = 4) {
   const options = [correctPlayer];
   const pool = allPlayers.filter((p) => p !== correctPlayer);
   const shuffled = shuffleArray(pool);
-  for (let i = 0; i < OPTIONS_COUNT - 1 && i < shuffled.length; i++) {
+  for (let i = 0; i < count - 1 && i < shuffled.length; i++) {
     options.push(shuffled[i]);
   }
   return shuffleArray(options);
@@ -47,7 +54,7 @@ export default function TransferGuesser({ onBack }) {
   const initGame = () => {
     const shuffled = shuffleArray(TRANSFERS).slice(0, ROUNDS_PER_GAME).map((transfer) => ({
       ...transfer,
-      options: generateOptions(transfer.player, allPlayerNames.current),
+      options: generateOptions(transfer.player, allPlayerNames.current, getOptionsCount(transfer.difficulty)),
     }));
     return shuffled;
   };
@@ -216,7 +223,23 @@ export default function TransferGuesser({ onBack }) {
                 <div style={{ fontSize: 13, fontWeight: 600 }}>{r.correct}</div>
                 <div style={{ fontWeight: 800, color: r.isCorrect ? "#00e676" : "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{r.points} pkt</div>
               </div>
-              <div style={{ fontSize: 11, color: "#5a6577", marginTop: 4 }}>{r.transfer.clubs.join(" → ")}</div>
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4, marginTop: 6 }}>
+                {r.transfer.clubs.map((club, ci) => {
+                  const cd = getClubData(club);
+                  return (
+                    <span key={ci} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      {ci > 0 && <span style={{ color: "#3a4455", fontSize: 9 }}>→</span>}
+                      <span style={{
+                        fontSize: 9, fontWeight: 800, color: cd.s,
+                        background: cd.p, borderRadius: 4,
+                        padding: "2px 5px",
+                        fontFamily: "'Outfit', sans-serif",
+                        letterSpacing: 0.3,
+                      }}>{cd.abbr}</span>
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           ))}
 
@@ -262,7 +285,7 @@ export default function TransferGuesser({ onBack }) {
             <span style={{ fontSize: 26, fontWeight: 900, color: timerColor, fontVariantNumeric: "tabular-nums", fontFamily: "'Outfit', sans-serif", animation: timeLeft <= 10 ? "timerUrgent 0.5s ease-in-out infinite" : "none" }}>{timeLeft}s</span>
           </div>
 
-          {/* Transfer path */}
+          {/* Transfer path with club badges */}
           <div style={{
             ...S.center, padding: "20px 16px",
             background: "rgba(179, 136, 255, 0.04)",
@@ -271,25 +294,64 @@ export default function TransferGuesser({ onBack }) {
             marginBottom: 20,
           }}>
             <div style={{ fontSize: 10, color: "#6a5a8a", marginBottom: 14, letterSpacing: 3, fontFamily: "'Outfit', sans-serif", fontWeight: 700 }}>ŚCIEŻKA TRANSFEROWA</div>
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              {current.clubs.map((club, i) => (
-                <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  {i > 0 && <span style={{ color: "#4a3a6a", fontSize: 13 }}>→</span>}
-                  <span style={{
-                    padding: "7px 14px",
-                    borderRadius: 10,
-                    fontSize: 13,
-                    fontWeight: 600,
-                    background: i < revealedClubs ? "rgba(179, 136, 255, 0.1)" : "rgba(255, 255, 255, 0.03)",
-                    color: i < revealedClubs ? "#d4bfff" : "#2a3444",
-                    border: i < revealedClubs ? "1px solid rgba(179, 136, 255, 0.2)" : "1px solid rgba(255, 255, 255, 0.06)",
-                    transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-                    animation: i < revealedClubs ? "revealClub 0.4s ease-out both" : "none",
-                  }}>
-                    {i < revealedClubs ? club : "???"}
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 6 }}>
+              {current.clubs.map((club, i) => {
+                const revealed = i < revealedClubs;
+                const cd = getClubData(club);
+                return (
+                  <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    {i > 0 && <span style={{ color: "#3a2a5a", fontSize: 11, margin: "0 2px" }}>→</span>}
+                    {revealed ? (
+                      <span style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "6px 12px 6px 6px",
+                        borderRadius: 10,
+                        background: `${cd.p}15`,
+                        border: `1px solid ${cd.p}30`,
+                        transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                        animation: "revealClub 0.4s ease-out both",
+                      }}>
+                        {/* Club badge */}
+                        <span style={{
+                          width: 28, height: 28, borderRadius: 7,
+                          background: `linear-gradient(135deg, ${cd.p}, ${cd.p}cc)`,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 9, fontWeight: 900, color: cd.s,
+                          fontFamily: "'Outfit', sans-serif",
+                          letterSpacing: 0.5,
+                          boxShadow: `0 2px 8px ${cd.p}40`,
+                          flexShrink: 0,
+                        }}>
+                          {cd.abbr}
+                        </span>
+                        <span style={{
+                          fontSize: 12, fontWeight: 600, color: "#d4bfff",
+                          whiteSpace: "nowrap",
+                        }}>
+                          {club}
+                        </span>
+                      </span>
+                    ) : (
+                      <span style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "6px 12px 6px 6px",
+                        borderRadius: 10,
+                        background: "rgba(255, 255, 255, 0.02)",
+                        border: "1px solid rgba(255, 255, 255, 0.05)",
+                        transition: "all 0.5s",
+                      }}>
+                        <span style={{
+                          width: 28, height: 28, borderRadius: 7,
+                          background: "rgba(255, 255, 255, 0.06)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 12, color: "#2a3444",
+                        }}>?</span>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: "#2a3444" }}>???</span>
+                      </span>
+                    )}
                   </span>
-                </span>
-              ))}
+                );
+              })}
             </div>
             <div style={{ fontSize: 11, color: "#4a3a6a", marginTop: 14, fontFamily: "'Outfit', sans-serif" }}>
               {revealedClubs}/{current.clubs.length} klubów odkrytych
@@ -303,7 +365,7 @@ export default function TransferGuesser({ onBack }) {
 
           {/* Options */}
           {!showResult && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: current.options.length > 4 ? "1fr 1fr 1fr" : "1fr 1fr", gap: 10, marginBottom: 20 }}>
               {current.options.map((option, i) => (
                 <button
                   key={i}
