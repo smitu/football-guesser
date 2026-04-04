@@ -164,7 +164,7 @@ export default function App() {
       { key: "scorer", icon: "🎯", title: "ZGADNIJ STRZELCA", desc: "Kto strzelił legendarną bramkę?", onClick: () => setGameMode("scorer"), style: modeButtons.scorer },
       { key: "transfer", icon: "🔄", title: "ZGADNIJ ZAWODNIKA", desc: "Rozpoznaj piłkarza po transferach", onClick: () => setGameMode("transfer"), style: modeButtons.transfer },
       { key: "learn", icon: "📚", title: "TRYB NAUKI", desc: "Ucz się piłki nożnej — przepisy, historia, pojęcia", onClick: () => setGameMode("learn"), style: modeButtons.learn },
-      { key: "stadium", icon: "🏟️", title: "ZGADNIJ STADION", desc: "Rozpoznaj stadion po wskazówkach lub na mapie", onClick: () => setGameMode("stadium"), style: modeButtons.stadium },
+      { key: "stadium", icon: "🏟️", title: "ZGADNIJ STADION", desc: "Odkrywaj wskazówki i zgadnij legendarne stadiony", onClick: () => setGameMode("stadium"), style: modeButtons.stadium },
     ];
 
     return (
