@@ -178,6 +178,12 @@ export const modeButtons = {
     color: "#fff",
     boxShadow: "0 4px 24px rgba(179, 136, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3)",
   },
+  learn: {
+    ...S.greenBtn,
+    background: "linear-gradient(135deg, #40c4ff 0%, #0091ea 100%)",
+    color: "#fff",
+    boxShadow: "0 4px 24px rgba(64, 196, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3)",
+  },
 };
 
 // ─── EXIT CONFIRMATION COMPONENT ───
