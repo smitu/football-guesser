@@ -184,6 +184,12 @@ export const modeButtons = {
     color: "#fff",
     boxShadow: "0 4px 24px rgba(64, 196, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3)",
   },
+  stadium: {
+    ...S.greenBtn,
+    background: "linear-gradient(135deg, #69f0ae 0%, #00bfa5 100%)",
+    color: "#060b14",
+    boxShadow: "0 4px 24px rgba(105, 240, 174, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3)",
+  },
 };
 
 // ─── EXIT CONFIRMATION COMPONENT ───

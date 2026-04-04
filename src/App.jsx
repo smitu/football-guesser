@@ -4,6 +4,7 @@ import ScoreGuesser from "./ScoreGuesser";
 import ScorerGuesser from "./ScorerGuesser";
 import TransferGuesser from "./TransferGuesser";
 import LearnMode from "./LearnMode";
+import StadiumGuesser from "./StadiumGuesser";
 import {
   shuffleArray, getScoreColor, difficultyLabels, difficultyColors,
   S, modeButtons, ExitConfirm,
@@ -153,6 +154,7 @@ export default function App() {
   if (gameMode === "scorer") return <ScorerGuesser onBack={goToMenu} />;
   if (gameMode === "transfer") return <TransferGuesser onBack={goToMenu} />;
   if (gameMode === "learn") return <LearnMode onBack={goToMenu} />;
+  if (gameMode === "stadium") return <StadiumGuesser onBack={goToMenu} />;
 
   // ─── MENU ───
   if (screen === "menu") {
@@ -162,6 +164,7 @@ export default function App() {
       { key: "scorer", icon: "🎯", title: "ZGADNIJ STRZELCA", desc: "Kto strzelił legendarną bramkę?", onClick: () => setGameMode("scorer"), style: modeButtons.scorer },
       { key: "transfer", icon: "🔄", title: "ZGADNIJ ZAWODNIKA", desc: "Rozpoznaj piłkarza po transferach", onClick: () => setGameMode("transfer"), style: modeButtons.transfer },
       { key: "learn", icon: "📚", title: "TRYB NAUKI", desc: "Ucz się piłki nożnej — przepisy, historia, pojęcia", onClick: () => setGameMode("learn"), style: modeButtons.learn },
+      { key: "stadium", icon: "🏟️", title: "ZGADNIJ STADION", desc: "Rozpoznaj stadion po wskazówkach lub na mapie", onClick: () => setGameMode("stadium"), style: modeButtons.stadium },
     ];
 
     return (
@@ -211,7 +214,7 @@ export default function App() {
         </div>
 
         <p style={{ color: "#3a4455", fontSize: 11, marginTop: 24, letterSpacing: 2, fontFamily: "'Outfit', sans-serif", fontWeight: 500 }}>
-          v0.6 · 5 trybów · {MATCHES.length} klasyków · 2026
+          v0.7 · 6 trybów · {MATCHES.length} klasyków · 2026
         </p>
       </div>
     );
