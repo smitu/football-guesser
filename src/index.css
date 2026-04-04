@@ -1,33 +1,38 @@
-/* ─── FOOTBALL GUESSER — STADIUM NIGHT THEME ─── */
+/* ─── GOLTIDO — MIDNIGHT PITCH THEME ─── */
 
 :root {
-  --bg-deep: #060b14;
-  --bg-card: #0c1220;
-  --bg-card-hover: #101828;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-glow: rgba(0, 230, 118, 0.15);
-  --text: #e8eaed;
-  --text-dim: #7a8599;
-  --text-muted: #4a5568;
+  --bg-void: #08090c;
+  --bg-surface: #0e1117;
+  --bg-elevated: #151921;
+  --bg-hover: #1a1f2b;
+  --border: rgba(255, 255, 255, 0.05);
+  --border-accent: rgba(74, 222, 128, 0.18);
+  --text: #edf0f7;
+  --text-secondary: #8892a4;
+  --text-muted: #4b5264;
 
-  --green: #00e676;
-  --green-dark: #00c853;
-  --green-glow: rgba(0, 230, 118, 0.25);
-  --gold: #ffab00;
-  --gold-glow: rgba(255, 171, 0, 0.2);
-  --red: #ff5252;
-  --red-glow: rgba(255, 82, 82, 0.2);
-  --purple: #b388ff;
-  --purple-glow: rgba(179, 136, 255, 0.2);
-  --orange: #ff9100;
+  --accent: #4ade80;
+  --accent-dark: #22c55e;
+  --accent-glow: rgba(74, 222, 128, 0.2);
+  --gold: #fbbf24;
+  --gold-glow: rgba(251, 191, 36, 0.15);
+  --red: #f87171;
+  --red-glow: rgba(248, 113, 113, 0.15);
+  --violet: #a78bfa;
+  --violet-glow: rgba(167, 139, 250, 0.15);
+  --sky: #38bdf8;
+  --sky-glow: rgba(56, 189, 248, 0.15);
+  --orange: #fb923c;
+  --teal: #2dd4bf;
 
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Sora', sans-serif;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-pill: 100px;
 }
 
 *, *::before, *::after {
@@ -39,7 +44,7 @@
 html, body, #root {
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--bg-deep);
+  background: var(--bg-void);
 }
 
 body {
@@ -50,41 +55,46 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle noise texture via SVG */
+/* ─── ATMOSPHERIC BACKGROUND ─── */
+#root {
+  position: relative;
+}
+
 #root::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 230, 118, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(179, 136, 255, 0.03) 0%, transparent 50%);
+    radial-gradient(ellipse 90% 40% at 50% -5%, rgba(74, 222, 128, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 100% 50%, rgba(167, 139, 250, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 0% 80%, rgba(56, 189, 248, 0.025) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Pitch lines decorative element */
+/* Subtle grid pattern */
 #root::after {
   content: '';
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  border: 1px solid rgba(0, 230, 118, 0.03);
-  border-radius: 50%;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 20%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 
 input:focus {
-  outline: 1px solid var(--green);
+  outline: 1.5px solid var(--accent);
   outline-offset: 0;
 }
 
 button {
-  font-family: var(--font-display);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-body);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 button:hover {
@@ -96,26 +106,19 @@ button:active {
 }
 
 ::selection {
-  background: rgba(0, 230, 118, 0.25);
+  background: rgba(74, 222, 128, 0.2);
   color: #fff;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 3px; }
 
 /* ─── ANIMATIONS ─── */
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -131,7 +134,7 @@ button:active {
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.5; }
 }
 
 @keyframes shimmer {
@@ -140,18 +143,18 @@ button:active {
 }
 
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px var(--green-glow), 0 4px 24px rgba(0, 0, 0, 0.4); }
-  50% { box-shadow: 0 0 32px var(--green-glow), 0 4px 32px rgba(0, 0, 0, 0.5); }
+  0%, 100% { box-shadow: 0 0 24px var(--accent-glow), 0 4px 20px rgba(0, 0, 0, 0.4); }
+  50% { box-shadow: 0 0 40px var(--accent-glow), 0 4px 28px rgba(0, 0, 0, 0.5); }
 }
 
 @keyframes borderGlow {
-  0%, 100% { border-color: rgba(0, 230, 118, 0.2); }
-  50% { border-color: rgba(0, 230, 118, 0.4); }
+  0%, 100% { border-color: rgba(74, 222, 128, 0.15); }
+  50% { border-color: rgba(74, 222, 128, 0.35); }
 }
 
 @keyframes revealClub {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.85) translateX(-6px); }
+  to   { opacity: 1; transform: scale(1) translateX(0); }
 }
 
 @keyframes countUp {
@@ -161,16 +164,31 @@ button:active {
 
 @keyframes timerUrgent {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes logoSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes accentShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(15deg); }
 }
 
 .animate-in {
-  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.stagger-1 { animation-delay: 0.05s; }
-.stagger-2 { animation-delay: 0.1s; }
-.stagger-3 { animation-delay: 0.15s; }
-.stagger-4 { animation-delay: 0.2s; }
-.stagger-5 { animation-delay: 0.25s; }
-.stagger-6 { animation-delay: 0.3s; }
+.stagger-1 { animation-delay: 0.04s; }
+.stagger-2 { animation-delay: 0.08s; }
+.stagger-3 { animation-delay: 0.12s; }
+.stagger-4 { animation-delay: 0.16s; }
+.stagger-5 { animation-delay: 0.20s; }
+.stagger-6 { animation-delay: 0.24s; }

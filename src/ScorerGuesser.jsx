@@ -157,13 +157,13 @@ export default function ScorerGuesser({ onBack }) {
     border: isHover ? "2px solid rgba(255, 82, 82, 0.3)" : "2px solid rgba(255, 255, 255, 0.06)",
     borderRadius: 14,
     padding: "18px 14px",
-    color: "#e8eaed",
+    color: "#edf0f7",
     fontSize: 14,
     fontWeight: 600,
     cursor: "pointer",
     transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
     textAlign: "center",
-    fontFamily: "'DM Sans', sans-serif",
+    fontFamily: "'Sora', sans-serif",
   });
 
   // ─── LEADERBOARD ───
@@ -177,10 +177,10 @@ export default function ScorerGuesser({ onBack }) {
           {leaderboard.map((entry, i) => (
             <div key={i} style={leaderboardRow(i)}>
               <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                <span style={{ fontWeight: 900, fontSize: 15, color: i === 0 ? "#ffab00" : i < 3 ? "#00e676" : "#4a5568", width: 28, textAlign: "center", fontFamily: "'Outfit', sans-serif" }}>{i + 1}</span>
+                <span style={{ fontWeight: 900, fontSize: 15, color: i === 0 ? "#fbbf24" : i < 3 ? "#4ade80" : "#4b5264", width: 28, textAlign: "center", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{i + 1}</span>
                 <span style={{ fontWeight: 600, fontSize: 15 }}>{entry.name}</span>
               </div>
-              <span style={{ fontWeight: 800, fontSize: 16, color: i === 0 ? "#ffab00" : "#00e676", fontFamily: "'Outfit', sans-serif" }}>{entry.score}</span>
+              <span style={{ fontWeight: 800, fontSize: 16, color: i === 0 ? "#fbbf24" : "#4ade80", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{entry.score}</span>
             </div>
           ))}
           <button style={{ ...S.ghostBtn, marginTop: 20 }} onClick={onBack}>WRÓĆ DO MENU</button>
@@ -197,25 +197,25 @@ export default function ScorerGuesser({ onBack }) {
         <div style={{ ...S.card, ...S.center, marginTop: 32 }}>
           <div style={{ fontSize: 52, marginBottom: 12 }}>🎉</div>
           <h2 style={{ ...S.h2, fontSize: 26 }}>KONIEC GRY!</h2>
-          <div style={{ fontSize: 12, color: "#5a6577", marginTop: 4, fontFamily: "'Outfit', sans-serif", letterSpacing: 2 }}>TRYB: ZGADNIJ STRZELCA</div>
+          <div style={{ fontSize: 12, color: "#8892a4", marginTop: 4, fontFamily: "'Bricolage Grotesque', sans-serif", letterSpacing: 2 }}>TRYB: ZGADNIJ STRZELCA</div>
 
           <div style={{ margin: "28px 0", padding: "24px", background: "rgba(0, 230, 118, 0.05)", borderRadius: 16, border: "1px solid rgba(0, 230, 118, 0.1)" }}>
-            <div style={{ fontSize: 52, fontWeight: 900, color: "#00e676", fontFamily: "'Outfit', sans-serif" }}>{totalScore}</div>
-            <div style={{ color: "#5a6577", fontSize: 12, marginTop: 4, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>PUNKTÓW</div>
+            <div style={{ fontSize: 52, fontWeight: 900, color: "#4ade80", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{totalScore}</div>
+            <div style={{ color: "#8892a4", fontSize: 12, marginTop: 4, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>PUNKTÓW</div>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center", gap: 40, marginBottom: 28 }}>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Outfit', sans-serif" }}>{matches.length}</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>BRAMEK</div>
+              <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Bricolage Grotesque', sans-serif" }}>{matches.length}</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>BRAMEK</div>
             </div>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "#ffab00", fontFamily: "'Outfit', sans-serif" }}>{correctCount}</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>TRAFIONE</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#fbbf24", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{correctCount}</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>TRAFIONE</div>
             </div>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "#76ff03", fontFamily: "'Outfit', sans-serif" }}>{Math.round((correctCount / matches.length) * 100)}%</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>CELNOŚĆ</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#76ff03", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{Math.round((correctCount / matches.length) * 100)}%</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>CELNOŚĆ</div>
             </div>
           </div>
 
@@ -223,9 +223,9 @@ export default function ScorerGuesser({ onBack }) {
             <div key={i} style={summaryMatchRow}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>{mr.match.home} vs {mr.match.away}</div>
-                <div style={{ fontWeight: 800, color: mr.isCorrect ? "#00e676" : "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{mr.isCorrect ? "✓" : "✗"}</div>
+                <div style={{ fontWeight: 800, color: mr.isCorrect ? "#4ade80" : "#f87171", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{mr.isCorrect ? "✓" : "✗"}</div>
               </div>
-              <div style={{ fontSize: 11, color: "#5a6577", marginTop: 4 }}>{mr.correct} {mr.minute}' · {mr.match.competition} {mr.match.season}</div>
+              <div style={{ fontSize: 11, color: "#8892a4", marginTop: 4 }}>{mr.correct} {mr.minute}' · {mr.match.competition} {mr.match.season}</div>
             </div>
           ))}
 
@@ -255,8 +255,8 @@ export default function ScorerGuesser({ onBack }) {
 
         <div style={topBar}>
           <button onClick={() => setShowExitConfirm(true)} style={exitBtn}>← Wyjdź</button>
-          <div style={{ fontSize: 13, color: "#5a6577", fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>Bramka {matchNum}/{matches.length}</div>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#00e676", fontFamily: "'Outfit', sans-serif" }}>{totalScore} pkt</div>
+          <div style={{ fontSize: 13, color: "#8892a4", fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600 }}>Bramka {matchNum}/{matches.length}</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: "#4ade80", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{totalScore} pkt</div>
         </div>
 
         <div style={{ ...S.card, position: "relative" }}>
@@ -268,7 +268,7 @@ export default function ScorerGuesser({ onBack }) {
             <span style={{ ...S.badge, background: difficultyColors[currentMatch.difficulty] + "12", color: difficultyColors[currentMatch.difficulty], border: `1px solid ${difficultyColors[currentMatch.difficulty]}22` }}>
               {difficultyLabels[currentMatch.difficulty]}
             </span>
-            <span style={{ fontSize: 26, fontWeight: 900, color: timerColor, fontVariantNumeric: "tabular-nums", fontFamily: "'Outfit', sans-serif", animation: timeLeft <= 5 ? "timerUrgent 0.5s ease-in-out infinite" : "none" }}>{timeLeft}s</span>
+            <span style={{ fontSize: 26, fontWeight: 900, color: timerColor, fontVariantNumeric: "tabular-nums", fontFamily: "'Bricolage Grotesque', sans-serif", animation: timeLeft <= 5 ? "timerUrgent 0.5s ease-in-out infinite" : "none" }}>{timeLeft}s</span>
           </div>
 
           {/* Match info */}
@@ -290,8 +290,8 @@ export default function ScorerGuesser({ onBack }) {
             marginBottom: 20,
           }}>
             <div style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5 }}>
-              Kto strzelił bramkę w <span style={{ color: "#ff5252", fontWeight: 700 }}>{currentGoal.minute}'</span>
-              <span style={{ color: "#5a6577", fontWeight: 400 }}> ({currentGoal.team === "home" ? currentMatch.home : currentMatch.away})</span>?
+              Kto strzelił bramkę w <span style={{ color: "#f87171", fontWeight: 700 }}>{currentGoal.minute}'</span>
+              <span style={{ color: "#8892a4", fontWeight: 400 }}> ({currentGoal.team === "home" ? currentMatch.home : currentMatch.away})</span>?
             </div>
           </div>
 
@@ -322,19 +322,19 @@ export default function ScorerGuesser({ onBack }) {
 
           {/* Result */}
           {showResult && lastResult && (
-            <div style={resultBox(lastResult.isCorrect ? "#00e676" : "#ff5252")}>
-              <div style={{ fontSize: 30, fontWeight: 900, color: lastResult.isCorrect ? "#00e676" : "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{lastResult.label}</div>
+            <div style={resultBox(lastResult.isCorrect ? "#4ade80" : "#f87171")}>
+              <div style={{ fontSize: 30, fontWeight: 900, color: lastResult.isCorrect ? "#4ade80" : "#f87171", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{lastResult.label}</div>
               {lastResult.timeOut ? (
-                <div style={{ fontSize: 14, color: "#5a6577", marginTop: 10 }}>Czas minął!</div>
+                <div style={{ fontSize: 14, color: "#8892a4", marginTop: 10 }}>Czas minął!</div>
               ) : !lastResult.isCorrect ? (
-                <div style={{ fontSize: 14, color: "#5a6577", marginTop: 10 }}>
-                  Twój typ: <b style={{ color: "#ff5252" }}>{lastResult.selected}</b>
+                <div style={{ fontSize: 14, color: "#8892a4", marginTop: 10 }}>
+                  Twój typ: <b style={{ color: "#f87171" }}>{lastResult.selected}</b>
                 </div>
               ) : null}
-              <div style={{ fontSize: 20, fontWeight: 700, color: "#e8eaed", marginTop: 14 }}>
-                Strzelec: <span style={{ color: "#00e676" }}>{lastResult.correct}</span> · {lastResult.minute}'
+              <div style={{ fontSize: 20, fontWeight: 700, color: "#edf0f7", marginTop: 14 }}>
+                Strzelec: <span style={{ color: "#4ade80" }}>{lastResult.correct}</span> · {lastResult.minute}'
               </div>
-              <div style={{ fontSize: 36, fontWeight: 900, color: lastResult.isCorrect ? "#00e676" : "#ff5252", marginTop: 10, fontFamily: "'Outfit', sans-serif" }}>+{lastResult.points}</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: lastResult.isCorrect ? "#4ade80" : "#f87171", marginTop: 10, fontFamily: "'Bricolage Grotesque', sans-serif" }}>+{lastResult.points}</div>
             </div>
           )}
 
@@ -349,7 +349,7 @@ export default function ScorerGuesser({ onBack }) {
               <div key={i} style={progressDot(
                 i < currentMatchIdx,
                 i === currentMatchIdx,
-                showResult ? (lastResult?.isCorrect ? "#00e676" : "#ff5252") : "#ffab00"
+                showResult ? (lastResult?.isCorrect ? "#4ade80" : "#f87171") : "#fbbf24"
               )} />
             ))}
           </div>

@@ -78,13 +78,13 @@ export default function LearnMode({ onBack }) {
       border: "2px solid rgba(255, 255, 255, 0.06)",
       borderRadius: 14,
       padding: "16px 18px",
-      color: "#e8eaed",
+      color: "#edf0f7",
       fontSize: 14,
       fontWeight: 500,
       cursor: selectedOption === null ? "pointer" : "default",
       transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
       textAlign: "left",
-      fontFamily: "'DM Sans', sans-serif",
+      fontFamily: "'Sora', sans-serif",
       lineHeight: 1.5,
       display: "flex",
       alignItems: "flex-start",
@@ -102,7 +102,7 @@ export default function LearnMode({ onBack }) {
         ...base,
         background: "rgba(0, 230, 118, 0.08)",
         borderColor: "rgba(0, 230, 118, 0.4)",
-        color: "#e8eaed",
+        color: "#edf0f7",
       };
     }
     if (isSelected && !isCorrect) {
@@ -110,7 +110,7 @@ export default function LearnMode({ onBack }) {
         ...base,
         background: "rgba(255, 82, 82, 0.08)",
         borderColor: "rgba(255, 82, 82, 0.4)",
-        color: "#e8eaed",
+        color: "#edf0f7",
         opacity: 0.9,
       };
     }
@@ -131,14 +131,14 @@ export default function LearnMode({ onBack }) {
       justifyContent: "center",
       fontSize: 12,
       fontWeight: 700,
-      fontFamily: "'Outfit', sans-serif",
+      fontFamily: "'Bricolage Grotesque', sans-serif",
       flexShrink: 0,
       background: isCorrect
         ? "rgba(0, 230, 118, 0.2)"
         : isWrong
         ? "rgba(255, 82, 82, 0.2)"
-        : `${category?.color || "#7a8599"}15`,
-      color: isCorrect ? "#00e676" : isWrong ? "#ff5252" : (category?.color || "#7a8599"),
+        : `${category?.color || "#8892a4"}15`,
+      color: isCorrect ? "#4ade80" : isWrong ? "#f87171" : (category?.color || "#8892a4"),
       border: isCorrect
         ? "1px solid rgba(0, 230, 118, 0.3)"
         : isWrong
@@ -161,7 +161,7 @@ export default function LearnMode({ onBack }) {
               margin: "0 auto 16px", fontSize: 28,
             }}>📚</div>
             <h2 style={{ ...S.h2, fontSize: 24 }}>TRYB NAUKI</h2>
-            <p style={{ ...S.sub, marginTop: 8, color: "#5a6577" }}>
+            <p style={{ ...S.sub, marginTop: 8, color: "#4b5264" }}>
               Wybierz kategorię i ucz się piłki nożnej!
             </p>
           </div>
@@ -184,8 +184,8 @@ export default function LearnMode({ onBack }) {
                   transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                   animation: "fadeInUp 0.4s ease-out both",
                   animationDelay: `${i * 0.06}s`,
-                  color: "#e8eaed",
-                  fontFamily: "'DM Sans', sans-serif",
+                  color: "#edf0f7",
+                  fontFamily: "'Sora', sans-serif",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = `${cat.color}14`;
@@ -210,11 +210,11 @@ export default function LearnMode({ onBack }) {
                 <div style={{ flex: 1 }}>
                   <div style={{
                     fontSize: 15, fontWeight: 700,
-                    fontFamily: "'Outfit', sans-serif",
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
                     color: cat.color,
                     letterSpacing: 0.3,
                   }}>{cat.title}</div>
-                  <div style={{ fontSize: 12, color: "#5a6577", marginTop: 3 }}>{cat.desc}</div>
+                  <div style={{ fontSize: 12, color: "#4b5264", marginTop: 3 }}>{cat.desc}</div>
                   <div style={{ fontSize: 11, color: "#3a4455", marginTop: 4 }}>{cat.questions.length} pytań</div>
                 </div>
                 <div style={{ color: "#3a4455", fontSize: 18 }}>→</div>
@@ -247,39 +247,39 @@ export default function LearnMode({ onBack }) {
           <h2 style={{ ...S.h2, fontSize: 24 }}>PODSUMOWANIE</h2>
           <div style={{
             fontSize: 11, color: category.color, marginTop: 6,
-            fontFamily: "'Outfit', sans-serif", letterSpacing: 2, fontWeight: 700,
+            fontFamily: "'Bricolage Grotesque', sans-serif", letterSpacing: 2, fontWeight: 700,
           }}>{category.title.toUpperCase()}</div>
 
           {/* Score circle */}
           <div style={{
             margin: "28px auto", width: 120, height: 120, borderRadius: "50%",
-            background: `${pct >= 70 ? "#00e676" : pct >= 50 ? "#ffab00" : "#ff5252"}0a`,
-            border: `3px solid ${pct >= 70 ? "#00e676" : pct >= 50 ? "#ffab00" : "#ff5252"}30`,
+            background: `${pct >= 70 ? "#4ade80" : pct >= 50 ? "#fbbf24" : "#f87171"}0a`,
+            border: `3px solid ${pct >= 70 ? "#4ade80" : pct >= 50 ? "#fbbf24" : "#f87171"}30`,
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           }}>
             <div style={{
               fontSize: 36, fontWeight: 900,
-              color: pct >= 70 ? "#00e676" : pct >= 50 ? "#ffab00" : "#ff5252",
-              fontFamily: "'Outfit', sans-serif",
+              color: pct >= 70 ? "#4ade80" : pct >= 50 ? "#fbbf24" : "#f87171",
+              fontFamily: "'Bricolage Grotesque', sans-serif",
             }}>{pct}%</div>
-            <div style={{ fontSize: 10, color: "#5a6577", letterSpacing: 1 }}>TRAFIEŃ</div>
+            <div style={{ fontSize: 10, color: "#4b5264", letterSpacing: 1 }}>TRAFIEŃ</div>
           </div>
 
-          <p style={{ color: "#7a8599", fontSize: 14, marginBottom: 24 }}>{message}</p>
+          <p style={{ color: "#8892a4", fontSize: 14, marginBottom: 24 }}>{message}</p>
 
           {/* Stats */}
           <div style={{ display: "flex", justifyContent: "center", gap: 40, marginBottom: 28 }}>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "#00e676", fontFamily: "'Outfit', sans-serif" }}>{correctCount}</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>POPRAWNE</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#4ade80", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{correctCount}</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>POPRAWNE</div>
             </div>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "#ff5252", fontFamily: "'Outfit', sans-serif" }}>{questions.length - correctCount}</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>BŁĘDNE</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#f87171", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{questions.length - correctCount}</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>BŁĘDNE</div>
             </div>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "#ffab00", fontFamily: "'Outfit', sans-serif" }}>{bestStreak}</div>
-              <div style={{ color: "#4a5568", fontSize: 10, letterSpacing: 2, fontFamily: "'Outfit', sans-serif" }}>SERIA</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#fbbf24", fontFamily: "'Bricolage Grotesque', sans-serif" }}>{bestStreak}</div>
+              <div style={{ color: "#4b5264", fontSize: 10, letterSpacing: 2, fontFamily: "'Bricolage Grotesque', sans-serif" }}>SERIA</div>
             </div>
           </div>
 
@@ -295,13 +295,13 @@ export default function LearnMode({ onBack }) {
                 </div>
                 <div style={{
                   fontWeight: 800, fontSize: 14,
-                  color: r.isCorrect ? "#00e676" : "#ff5252",
-                  fontFamily: "'Outfit', sans-serif",
+                  color: r.isCorrect ? "#4ade80" : "#f87171",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
                   flexShrink: 0,
                 }}>{r.isCorrect ? "✓" : "✗"}</div>
               </div>
               {!r.isCorrect && (
-                <div style={{ fontSize: 11, color: "#5a6577", marginTop: 6 }}>
+                <div style={{ fontSize: 11, color: "#4b5264", marginTop: 6 }}>
                   Poprawna: {r.question.options[r.question.correct]}
                 </div>
               )}
@@ -312,7 +312,7 @@ export default function LearnMode({ onBack }) {
             <button style={{
               ...S.greenBtn,
               background: `linear-gradient(135deg, ${category.color}, ${category.color}cc)`,
-              color: category.id === "basics" ? "#060b14" : "#fff",
+              color: category.id === "basics" ? "#08090c" : "#fff",
               boxShadow: `0 4px 24px ${category.color}25`,
             }} onClick={() => startCategory(category)}>
               ZAGRAJ PONOWNIE
@@ -343,7 +343,7 @@ export default function LearnMode({ onBack }) {
           <div style={{
             fontSize: 12, fontWeight: 700,
             color: category.color,
-            fontFamily: "'Outfit', sans-serif",
+            fontFamily: "'Bricolage Grotesque', sans-serif",
             letterSpacing: 1,
             display: "flex", alignItems: "center", gap: 6,
           }}>
@@ -351,8 +351,8 @@ export default function LearnMode({ onBack }) {
             <span>{category.title.split(" ").slice(0, 2).join(" ")}</span>
           </div>
           <div style={{
-            fontSize: 14, fontWeight: 700, color: "#00e676",
-            fontFamily: "'Outfit', sans-serif",
+            fontSize: 14, fontWeight: 700, color: "#4ade80",
+            fontFamily: "'Bricolage Grotesque', sans-serif",
           }}>{correctCount}/{questionNum - (selectedOption !== null ? 0 : 1)}</div>
         </div>
 
@@ -387,8 +387,8 @@ export default function LearnMode({ onBack }) {
             </span>
             {streak > 1 && (
               <span style={{
-                fontSize: 12, fontWeight: 700, color: "#ffab00",
-                fontFamily: "'Outfit', sans-serif",
+                fontSize: 12, fontWeight: 700, color: "#fbbf24",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
                 animation: "fadeIn 0.3s ease-out",
               }}>🔥 Seria: {streak}</span>
             )}
@@ -398,8 +398,8 @@ export default function LearnMode({ onBack }) {
           <div style={{
             fontSize: 17, fontWeight: 600, lineHeight: 1.6,
             marginBottom: 24,
-            color: "#e8eaed",
-            fontFamily: "'DM Sans', sans-serif",
+            color: "#edf0f7",
+            fontFamily: "'Sora', sans-serif",
           }}>
             {current.question}
           </div>
@@ -452,13 +452,13 @@ export default function LearnMode({ onBack }) {
             }}>
               <div style={{
                 fontSize: 14, fontWeight: 700, marginBottom: 8,
-                color: selectedOption === current.correctShuffled ? "#00e676" : "#ff5252",
-                fontFamily: "'Outfit', sans-serif",
+                color: selectedOption === current.correctShuffled ? "#4ade80" : "#f87171",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
               }}>
                 {selectedOption === current.correctShuffled ? "✓ Poprawna odpowiedź!" : "✗ Niestety, błąd"}
               </div>
               <div style={{
-                fontSize: 13, color: "#7a8599", lineHeight: 1.6,
+                fontSize: 13, color: "#8892a4", lineHeight: 1.6,
               }}>
                 {current.explanation}
               </div>
@@ -470,7 +470,7 @@ export default function LearnMode({ onBack }) {
             <button style={{
               ...S.greenBtn,
               background: `linear-gradient(135deg, ${category.color}, ${category.color}cc)`,
-              color: category.id === "basics" ? "#060b14" : "#fff",
+              color: category.id === "basics" ? "#08090c" : "#fff",
               boxShadow: `0 4px 24px ${category.color}25`,
               animation: "fadeIn 0.2s ease-out",
             }} onClick={nextQuestion}>
@@ -488,7 +488,7 @@ export default function LearnMode({ onBack }) {
                 <div key={i} style={{
                   width: 7, height: 7, borderRadius: "50%",
                   background: done
-                    ? (wasCorrect ? "#00e676" : "#ff5252")
+                    ? (wasCorrect ? "#4ade80" : "#f87171")
                     : isCurrent ? category.color : "rgba(255, 255, 255, 0.08)",
                   transition: "all 0.3s",
                   boxShadow: isCurrent ? `0 0 8px ${category.color}44` : "none",
